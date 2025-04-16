@@ -1,0 +1,40 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set up Docker container
+      - name: Build and run app
+        run: |
+          docker build -t ui-testing-app ./ui-testing-app
+          docker run -d -p 5000:5000 --name ui-app ui-testing-app
+          sleep 5  # Wait for app to start
+
+      # Install Cypress and dependencies
+      - name: Install dependencies
+        run: |
+          npm init -y  # Only needed if no package.json exists
+          npm install cypress --save-dev
+
+      # Run Cypress tests against the Docker container
+      - name: Run Cypress tests
+        run: npx cypress run --browser chrome
+        env:
+          CYPRESS_baseUrl: http://localhost:5000
+    
+      # # Optional: Store videos
+      # - uses: actions/upload-artifact@v3
+      #   if: failure()
+      #   with:
+      #     name: cypress-videos
+      #     path: cypress/videos
+
+      # Cleanup (optional)
+      - name: Stop container
+        if: always()  # Runs even if tests fail
+        run: docker stop ui-app
