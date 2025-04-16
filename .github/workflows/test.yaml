@@ -11,7 +11,7 @@ jobs:
       # Set up Docker container
       - name: Build and run app
         run: |
-          docker build -t ui-testing-app ./ui-testing-app
+          docker build -t ui-testing-app .
           docker run -d -p 5000:5000 --name ui-app ui-testing-app
           sleep 5  # Wait for app to start
 
