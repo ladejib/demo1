@@ -12,7 +12,8 @@ jobs:
       - name: Build and run app
         run: |
           docker build -t ui-testing-app .
-          docker run -d -p 5000:5000 --name ui-app --health-cmd="curl -f http://localhost:5000 || exit 1" --health-interval=2s --health-retries=30 ui-testing-app
+          docker run -d -p 5000:5000 --name ui-app --health-cmd="curl -f http://localhost:5000 || exit 1" --health-interval=2s --health-retries=30 --health-timeout=2s ui-testing-app
+          
           sleep 15  # Wait for app to start
 
           # Wait for container to be healthy
@@ -22,7 +23,7 @@ jobs:
       # Verify container status
       - name: Check container health
         run: docker ps -a
-        
+
       # Install Cypress and dependencies
       - name: Install dependencies
         run: |
