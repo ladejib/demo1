@@ -28,6 +28,7 @@ jobs:
         run: |
           npm init -y  # Only needed if no package.json exists
           npm install cypress wait-on --save-dev
+          npm install --save-dev wait-on
 
       # Run Cypress tests against the Docker container
       - name: Run Cypress tests
