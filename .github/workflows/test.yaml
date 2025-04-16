@@ -12,9 +12,17 @@ jobs:
       - name: Build and run app
         run: |
           docker build -t ui-testing-app .
-          docker run -d -p 5000:5000 --name ui-app ui-testing-app
-          sleep 5  # Wait for app to start
+          docker run -d -p 5000:5000 --name ui-app --health-cmd="curl -f http://localhost:5000 || exit 1" --health-interval=2s --health-retries=30 ui-testing-app
+          sleep 15  # Wait for app to start
 
+          # Wait for container to be healthy
+          docker inspect --format='{{json .State.Health.Status}}' ui-app | grep -q '"healthy"'
+          sleep 5  # Additional buffer time
+
+      # Verify container status
+      - name: Check container health
+        run: docker ps -a
+        
       # Install Cypress and dependencies
       - name: Install dependencies
         run: |
@@ -25,7 +33,7 @@ jobs:
       - name: Run Cypress tests
         run: npx cypress run --browser chrome
         env:
-          CYPRESS_baseUrl: http://127.0.0.1:5000
+          CYPRESS_baseUrl: http://localhost:5000
     
       # # Optional: Store videos
       # - uses: actions/upload-artifact@v3
