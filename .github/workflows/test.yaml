@@ -15,6 +15,11 @@ jobs:
           docker run -d -p 5000:5000 --name ui-app ui-testing-app
           sleep 30  # Wait for app to start
 
+      # Install wait-on
+      - name: Install wait-on
+        run: |
+          npm install --save-dev wait-on
+
       # Wait for app to be ready
       - name: Wait for app to be ready
         run: npx wait-on http://localhost:5000
@@ -28,7 +33,6 @@ jobs:
         run: |
           npm init -y  # Only needed if no package.json exists
           npm install cypress wait-on --save-dev
-          npm install --save-dev wait-on
 
       # Run Cypress tests against the Docker container
       - name: Run Cypress tests
