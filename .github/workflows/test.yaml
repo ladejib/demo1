@@ -14,7 +14,7 @@ jobs:
           docker build -t ui-testing-app .
           docker run -d -p 5000:5000 --name ui-app ui-testing-app
           sleep 5  # Wait for app to start
-
+  
       # Install Cypress and dependencies
       - name: Install dependencies
         run: |
