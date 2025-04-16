@@ -1,11 +1,9 @@
-FROM python:3.12-bookworm
+FROM python:3.13-bookworm
 
 WORKDIR /app
-COPY requirements.txt .
+COPY . .
 
 RUN pip install -r requirements.txt
-
-COPY app/. .
 
 EXPOSE 5000
 CMD ["python", "app.py"]
