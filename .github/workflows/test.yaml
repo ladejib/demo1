@@ -14,6 +14,10 @@ jobs:
           docker build -t ui-testing-app .
           docker run -d -p 5000:5000 --name ui-app ui-testing-app
           sleep 30  # Wait for app to start
+          
+      # Return the logs for ui-app
+      - name: Check container logs
+        run: docker logs ui-app
 
       # Install wait-on
       - name: Install wait-on
@@ -22,7 +26,7 @@ jobs:
 
       # Wait for app to be ready
       - name: Wait for app to be ready
-        run: npx wait-on http://localhost:5000
+        run: npx wait-on http://localhost:5000 --timeout 30000
 
       # Verify container status
       - name: Check container health
