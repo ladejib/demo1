@@ -70,6 +70,29 @@ jobs:
           echo "Running playwright test"
           npx playwright test
 
+      # Run k6 tests with proper volume mounting
+      - name: Execute performance tests
+        run: |
+          # Create directory structure if not exists
+          mkdir -p ./performance-tests/results
+          
+          # Run with explicit volume mount
+          docker run \
+            --rm \
+            --network host \
+            -v "$(pwd)/performance-tests:/scripts" \
+            -v "$(pwd)/performance-tests/results:/results" \
+            grafana/k6 run \
+            --out json=/results/output.json \
+            /scripts/login-test.js
+
+      # Upload results
+      - name: Store test artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-results
+          path: performance-tests/results/*
+
       # Cleanup (optional)
       - name: Stop container
         if: always()  # Runs even if tests fail
