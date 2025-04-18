@@ -10,11 +10,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 1. Create a shared network
+      - name: create a docker network
+        run: |
+          docker network create test-network
+
       # Set up Docker container
       - name: Build and run app
         run: |
           docker build -t ui-testing-app .
-          docker run -d -p 5000:5000 --name ui-app ui-testing-app
+          docker run -d -p 5000:5000 --name ui-app --network test-network ui-testing-app
           sleep 30  # Wait for app to start
           
       # Return the logs for ui-app
@@ -73,13 +78,9 @@ jobs:
       # Run k6 tests with proper volume mounting
       - name: Execute performance tests
         run: |
-          # Create directory structure if not exists
-          mkdir -p ./performance-tests/results
-          
-          # Run with explicit volume mount
           docker run \
             --rm \
-            --network host \
+            --network test-network \
             -v "$(pwd)/performance-tests:/scripts" \
             -v "$(pwd)/performance-tests/results:/results" \
             grafana/k6 run \
