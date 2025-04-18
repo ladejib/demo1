@@ -18,8 +18,8 @@ jobs:
       # Setup directories with correct permissions
       - name: Prepare results directory
         run: |
-          mkdir -p performance-tests/results
-          chmod 775 performance-tests/results  # Read/write for group
+          mkdir results
+          chmod 775 results  # Read/write for group
 
 
       # Set up Docker container
