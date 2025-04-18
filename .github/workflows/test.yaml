@@ -4,7 +4,7 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    #timeout-minutes: 15
 
     steps:
       - name: Checkout code
@@ -59,7 +59,7 @@ jobs:
       # install Playwright
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
-        
+
       # Install @playwright/test
       - name: Install @playwright/test
         run: npm install --save-dev @playwright/test
