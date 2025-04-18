@@ -6,6 +6,16 @@ __pycache__/
 # C extensions
 *.so
 
+# Playwright
+node_modules/
+test-results/
+e2e/
+playwright-report/
+package-lock.json
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
 # Distribution / packaging
 .Python
 build/
