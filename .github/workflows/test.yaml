@@ -10,10 +10,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 1. Create a shared network
+      # Create a shared network
       - name: create a docker network
         run: |
           docker network create test-network
+      
+      # Setup directories with correct permissions
+      - name: Prepare results directory
+        run: |
+          mkdir -p performance-tests/results
+          chmod 775 performance-tests/results  # Read/write for group
+
 
       # Set up Docker container
       - name: Build and run app
