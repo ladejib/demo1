@@ -59,11 +59,11 @@ jobs:
       # install Playwright
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
-        
+
       # Run Playwright test
       - name: Run Playwright tests
         run: |
-          echo "Running
+          echo "Running playwright test"
           npx playwright test
 
       # Cleanup (optional)
