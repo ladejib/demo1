@@ -108,12 +108,12 @@ jobs:
           docker run \
             --rm \
             --network test-network \
-            --env OUTPUT_FILENAME="$FILENAME" \
+            -u "$(id -u):$(id -g)" \  # Critical for permission stability
             -v "$(pwd)/performance-tests:/scripts" \
             -v "$(pwd)/performance-tests/results:/results" \
             -e "OUTPUT_FILE=/results/$(basename $OUTPUT_FILE)" \
             grafana/k6 \
-            run scripts/login-test.js --out json="$OUTPUT_FILE"  \ 
+            run  --out json="$OUTPUT_FILE" scripts/login-test.js \ 
 
       # Upload results
       - name: Store test artifacts
