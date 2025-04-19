@@ -105,8 +105,9 @@ jobs:
             --network test-network \
             -v "$(pwd)/performance-tests:/scripts" \
             -v "$(pwd)/performance-tests/results:/results" \
-            grafana/k6 run \
             --env OUTPUT_FILENAME="$FILENAME" \
+
+            grafana/k6 run \
             --out json=/results/$OUTPUT_FILENAME \ 
             /scripts/login-test.js
 
