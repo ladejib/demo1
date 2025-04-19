@@ -108,8 +108,9 @@ jobs:
             --rm \
             --network test-network \
             --env OUTPUT_FILENAME="$FILENAME" \
-            -v "$(pwd)/performance-tests:/scripts" \
-            -v "$(pwd)/performance-tests/results:/results" \
+            # (-v /local/path/:/inside/docker/path
+            -v "$(pwd)/performance-tests/:/scripts" \
+            -v "$(pwd)/performance-tests/results/:/results" \
             -e "OUTPUT_FILE=/results/$(basename $OUTPUT_FILE)" \
             grafana/k6 run \
             --out json="$OUTPUT_FILE"  \ 
