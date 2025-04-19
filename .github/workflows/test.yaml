@@ -101,13 +101,10 @@ jobs:
       - name: Execute performance tests
         run: |
           echo $(pwd)
-          mkdir results && chmod 777 results
-          ls -ls
-          OUTPUT_FILE="$(pwd)/results/output_$(date +%s).json"
+          OUTPUT_FILE="$(pwd)/output_$(date +%s).json"
           touch "$OUTPUT_FILE"  # Ensure file exists with correct permissions
           chmod 777 "$OUTPUT_FILE"
-          ls -ls results/
-            
+
           docker run \
             --rm \
             --network test-network \
@@ -115,9 +112,8 @@ jobs:
             -v "$(pwd)/performance-tests:/scripts" \
             -v "$(pwd)/performance-tests/results:/results" \
             -e "OUTPUT_FILE=/results/$(basename $OUTPUT_FILE)" \
-            grafana/k6 run \
-            --out json="$OUTPUT_FILE"  \ 
-            /scripts/login-test.js
+            grafana/k6 \
+            k6 run /scripts/login-test.js --out json="$OUTPUT_FILE"  \ 
 
       # Upload results
       - name: Store test artifacts
