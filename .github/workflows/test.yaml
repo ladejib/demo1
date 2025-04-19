@@ -101,9 +101,10 @@ jobs:
       - name: Prepare results directory
         run: mkdir -p performance-tests/results
 
+      # OUTPUT_FILE="performance-tests/results/output_$(date +%s).json"
       - name: Run K6 test inside Docker
         run: |
-          OUTPUT_FILE="performance-tests/results/output_$(date +%s).json"
+          OUTPUT_FILE="results/output_$(date +%s).json"
           touch "$OUTPUT_FILE"  # Ensure file exists with correct permissions
 
           docker run --rm \
