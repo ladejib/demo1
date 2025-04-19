@@ -100,15 +100,16 @@ jobs:
       # Run k6 tests with proper volume mounting
       - name: Execute performance tests
         run: |
-          mkdir $(pwd)/results
-          OUTPUT_FILE="$(pwd)/results/output_$(date +%s).json"
+          echo $(pwd)
+          mkdir $(pwd)/performance-tests/results
+          OUTPUT_FILE="$(pwd)/performance-tests/results/output_$(date +%s).json"
           touch "$OUTPUT_FILE"  # Ensure file exists with correct permissions
           chmod 777 "$OUTPUT_FILE"
+          ls -ls
           docker run \
             --rm \
             --network test-network \
             --env OUTPUT_FILENAME="$FILENAME" \
-            # (-v /local/path/:/inside/docker/path
             -v "$(pwd)/performance-tests/:/scripts" \
             -v "$(pwd)/performance-tests/results/:/results" \
             -e "OUTPUT_FILE=/results/$(basename $OUTPUT_FILE)" \
