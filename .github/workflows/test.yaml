@@ -101,7 +101,7 @@ jobs:
       - name: Execute performance tests
         run: |
           echo $(pwd)
-          mkdir $(pwd)/results
+          mkdir results && chmod 777 results
           ls -ls
           OUTPUT_FILE="$(pwd)/results/output_$(date +%s).json"
           touch "$OUTPUT_FILE"  # Ensure file exists with correct permissions
