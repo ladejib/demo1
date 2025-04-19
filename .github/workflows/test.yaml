@@ -103,10 +103,9 @@ jobs:
           docker run \
             --rm \
             --network test-network \
+            --env OUTPUT_FILENAME="$FILENAME" \
             -v "$(pwd)/performance-tests:/scripts" \
             -v "$(pwd)/performance-tests/results:/results" \
-            --env OUTPUT_FILENAME="$FILENAME" \
-
             grafana/k6 run \
             --out json=/results/$OUTPUT_FILENAME \ 
             /scripts/login-test.js
