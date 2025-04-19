@@ -103,16 +103,17 @@ jobs:
 
       - name: Run K6 test inside Docker
         run: |
-          TIMESTAMP=$(date +%s)
-          OUTPUT_FILENAME="output_${TIMESTAMP}.json"
-          OUTPUT_CONTAINER_PATH="/results/${OUTPUT_FILENAME}"
+          OUTPUT_FILE="performance-tests/results/output_$(date +%s).json"
+          touch "$OUTPUT_FILE"  # Ensure file exists with correct permissions
 
-          docker run \
-            --rm \
-            -v ${{ github.workspace }}/performance-tests:/scripts \
-            -v ${{ github.workspace }}/performance-tests/results:/results \
-            grafana/k6 \
-            run --out json="${OUTPUT_CONTAINER_PATH}" /scripts/login-test.js
+          docker run --rm \
+            --network test-network \
+            -v "$(pwd)/performance-tests:/scripts" \
+            -v "$(pwd)/performance-tests/results:/results" \
+            -e "OUTPUT_FILE=/results/$(basename $OUTPUT_FILE)" \
+            grafana/k6 run \
+            --out json="$OUTPUT_FILE" \
+            /scripts/login-test.js
 
       - name: Upload K6 Results
         uses: actions/upload-artifact@v4
