@@ -15,12 +15,12 @@ jobs:
         run: |
           docker network create test-network
       
-      # Setup directories with correct permissions
-      - name: Prepare results directory
-        run: |
-          mkdir results
-          chmod 775 results  # Read/write for group
-          ls -atlr
+      # # Setup directories with correct permissions
+      # - name: Prepare results directory
+      #   run: |
+      #     mkdir results
+      #     chmod 775 results  # Read/write for group
+      #     ls -atlr
 
 
       # Set up Docker container
@@ -92,7 +92,7 @@ jobs:
             -v "$(pwd)/performance-tests:/scripts" \
             -v "$(pwd)/performance-tests/results:/results" \
             grafana/k6 run \
-            --out json=results/output.json \
+            --out json=/results/output.json \
             /scripts/login-test.js
 
       # Upload results
