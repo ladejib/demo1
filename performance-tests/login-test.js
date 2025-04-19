@@ -14,7 +14,7 @@ export const options = {
 };
 
 export default function () {
-  const loginRes = http.post('http://localhost:5000/login', {
+  const loginRes = http.post('http://ui-app:5000/login', {
     username: 'admin',
     password: 'admin123',
   });
