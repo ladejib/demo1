@@ -101,11 +101,11 @@ jobs:
       - name: Execute performance tests
         run: |
           echo $(pwd)
-          mkdir $(pwd)/performance-tests/results
-          OUTPUT_FILE="$(pwd)/performance-tests/results/output_$(date +%s).json"
+          mkdir $(pwd)/results
+          ls -ls
+          OUTPUT_FILE="$(pwd)/results/output_$(date +%s).json"
           touch "$OUTPUT_FILE"  # Ensure file exists with correct permissions
           chmod 777 "$OUTPUT_FILE"
-          ls -ls
           docker run \
             --rm \
             --network test-network \
