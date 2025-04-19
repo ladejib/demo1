@@ -113,7 +113,7 @@ jobs:
             -v "$(pwd)/performance-tests/results:/results" \
             -e "OUTPUT_FILE=/results/$(basename $OUTPUT_FILE)" \
             grafana/k6 \
-            run /scripts/login-test.js --out json="$OUTPUT_FILE"  \ 
+            run scripts/login-test.js --out json="$OUTPUT_FILE"  \ 
 
       # Upload results
       - name: Store test artifacts
