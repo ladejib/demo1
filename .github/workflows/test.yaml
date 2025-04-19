@@ -98,29 +98,27 @@ jobs:
           npx playwright test
 
       # Run k6 tests with proper volume mounting
-      - name: Execute performance tests
+      - name: Prepare results directory
+        run: mkdir -p performance-tests/results
+
+      - name: Run K6 test inside Docker
         run: |
-          echo $(pwd)
-          OUTPUT_FILE="$(pwd)/output_$(date +%s).json"
-          touch "$OUTPUT_FILE"  # Ensure file exists with correct permissions
-          chmod 777 "$OUTPUT_FILE"
+          TIMESTAMP=$(date +%s)
+          OUTPUT_FILENAME="output_${TIMESTAMP}.json"
+          OUTPUT_CONTAINER_PATH="/results/${OUTPUT_FILENAME}"
 
           docker run \
             --rm \
-            --network test-network \
-            -u "$(id -u):$(id -g)" \  # Critical for permission stability
-            -v "$(pwd)/performance-tests:/scripts" \
-            -v "$(pwd)/performance-tests/results:/results" \
-            -e "OUTPUT_FILE=/results/$(basename $OUTPUT_FILE)" \
+            -v ${{ github.workspace }}/performance-tests:/scripts \
+            -v ${{ github.workspace }}/performance-tests/results:/results \
             grafana/k6 \
-            run  --out json="$OUTPUT_FILE" scripts/login-test.js \ 
+            run --out json="${OUTPUT_CONTAINER_PATH}" /scripts/login-test.js
 
-      # Upload results
-      - name: Store test artifacts
+      - name: Upload K6 Results
         uses: actions/upload-artifact@v4
         with:
           name: k6-results
-          path: performance-tests/results/*
+          path: performance-tests/results/
 
       # Cleanup (optional)
       - name: Stop container
