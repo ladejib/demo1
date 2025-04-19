@@ -104,10 +104,10 @@ jobs:
             --rm \
             --network test-network \
             --env OUTPUT_FILENAME="$FILENAME" \
-            -v "$(pwd)/performance-tests:/scripts/" \
-            -v "$(pwd)/performance-tests/results:/results/" \
+            -v "$(pwd)/performance-tests:/scripts" \
+            -v "$(pwd)/performance-tests/results:/results" \
             grafana/k6 run \
-            --out json=/results/$OUTPUT_FILENAME \ 
+            --out "json=/results/${OUTPUT_FILENAME}" \ 
             /scripts/login-test.js
 
       # Upload results
