@@ -15,12 +15,26 @@ jobs:
         run: |
           docker network create test-network
       
-      # # Setup directories with correct permissions
-      # - name: Prepare results directory
-      #   run: |
-      #     mkdir results
-      #     chmod 775 results  # Read/write for group
-      #     ls -atlr
+      # Generate unique file name
+
+      - name: Generate random string
+        id: random_string
+        run: |
+          random_value=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 8)
+          echo "random_value=$random_value" >> $GITHUB_OUTPUT
+
+      - name: Get current date
+        id: date
+        run: |
+          current_date=$(date +%Y%m%d)
+          echo "current_date=$current_date" >> $GITHUB_OUTPUT
+
+      - name: Set filename
+        id: filename
+        run: |
+          filename="results_${{ steps.date.outputs.current_date }}_${{ steps.random_string.outputs.random_value }}.json"
+          echo "FILENAME=$filename" >> $GITHUB_ENV # Export as environment variable
+          echo "filename=$filename" >> $GITHUB_OUTPUT # Keep for potential later use in workflow
 
 
       # Set up Docker container
@@ -92,7 +106,8 @@ jobs:
             -v "$(pwd)/performance-tests:/scripts" \
             -v "$(pwd)/performance-tests/results:/results" \
             grafana/k6 run \
-            --out json=/results/output.json \
+            --env OUTPUT_FILENAME="$FILENAME" \
+            --out json=/results/$OUTPUT_FILENAME \ 
             /scripts/login-test.js
 
       # Upload results
