@@ -100,7 +100,7 @@ jobs:
       # Run k6 tests with proper volume mounting
       - name: Execute performance tests
         run: |
-          OUTPUT_FILE="performance-tests/results/output_$(date +%s).json"
+          OUTPUT_FILE="$(pwd)/results/output_$(date +%s).json"
           touch "$OUTPUT_FILE"  # Ensure file exists with correct permissions
           docker run \
             --rm \
