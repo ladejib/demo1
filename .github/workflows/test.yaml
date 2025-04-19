@@ -20,7 +20,7 @@ jobs:
         run: |
           mkdir results
           chmod 775 results  # Read/write for group
-          touch /results/output.json
+          touch results/output.json
           ls -atlr
 
 
