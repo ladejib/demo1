@@ -127,11 +127,13 @@ jobs:
 
           docker run --rm \
             --network test-network \
+            -u $(id -u):$(id -g) \
             -v "${{ github.workspace }}/performance-tests:/scripts" \
             -v "${{ github.workspace }}/performance-tests/results:/results" \
             grafana/k6 run \
             --out json="${OUTPUT_CONTAINER_PATH}" \
             /scripts/login-test.js
+
 
           echo "K6 run complete. Output saved to: $OUTPUT_HOST_PATH"
 
