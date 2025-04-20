@@ -120,7 +120,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: k6-results
-          path: performance-tests/results/
+          path: $(pwd)/performance-tests/results/
 
       # Cleanup (optional)
       - name: Stop container
