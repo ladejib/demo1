@@ -97,24 +97,43 @@ jobs:
           echo "Running playwright test"
           npx playwright test
 
-      # Run k6 tests with proper volume mounting
-      - name: Prepare results directory
-        run: mkdir -p performance-tests/results
+      # # Run k6 tests with proper volume mounting
+      # - name: Prepare results directory
+      #   run: mkdir -p performance-tests/results
 
-      # OUTPUT_FILE="performance-tests/results/output_$(date +%s).json"
-      - name: Run K6 test inside Docker
+      # # OUTPUT_FILE="performance-tests/results/output_$(date +%s).json"
+      # - name: Run K6 test inside Docker
+      #   run: |
+      #     OUTPUT_FILE="performance-tests/results/output_$(date +%s).json"
+      #     touch "$OUTPUT_FILE"  # Ensure file exists with correct permissions
+
+      #     docker run --rm \
+      #       --network test-network \
+      #       -v "$(pwd)/performance-tests:/scripts" \
+      #       -v "$(pwd)/performance-tests/results:/results" \
+      #       -e "OUTPUT_FILE1=/results/$(basename $OUTPUT_FILE)" \
+      #       grafana/k6 run \
+      #       --out json="$OUTPUT_FILE1" \
+      #       /scripts/login-test.js
+      
+      - name: Run K6 performance test
         run: |
-          OUTPUT_FILE="performance-tests/results/output_$(date +%s).json"
-          touch "$OUTPUT_FILE"  # Ensure file exists with correct permissions
+          TIMESTAMP=$(date +%s)
+          OUTPUT_FILENAME="output_${TIMESTAMP}.json"
+          OUTPUT_HOST_PATH="${{ github.workspace }}/performance-tests/results/${OUTPUT_FILENAME}"
+          OUTPUT_CONTAINER_PATH="/results/${OUTPUT_FILENAME}"
+
+          mkdir -p "${{ github.workspace }}/performance-tests/results"
 
           docker run --rm \
             --network test-network \
-            -v "$(pwd)/performance-tests:/scripts" \
-            -v "$(pwd)/performance-tests/results:/results" \
-            -e "OUTPUT_FILE1=/results/$(basename $OUTPUT_FILE)" \
+            -v "${{ github.workspace }}/performance-tests:/scripts" \
+            -v "${{ github.workspace }}/performance-tests/results:/results" \
             grafana/k6 run \
-            --out json="$OUTPUT_FILE1" \
+            --out json="${OUTPUT_CONTAINER_PATH}" \
             /scripts/login-test.js
+
+          echo "K6 run complete. Output saved to: $OUTPUT_HOST_PATH"
 
       - name: Upload K6 Results
         uses: actions/upload-artifact@v4
