@@ -1,4 +1,4 @@
-version: '3.8'
+# version: '3.8'
 
 services:
   influxdb:
@@ -37,8 +37,8 @@ services:
     depends_on:
       - influxdb
     volumes:
-      - ./performance-tests/results:/results
-      - ./performance-tests/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - ./json-telegraf/results:/results
+      - ./json-telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
 
 volumes:
   influxdb-data:

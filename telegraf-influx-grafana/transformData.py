@@ -12,7 +12,7 @@ def sanitize_tag_value(value):
         .replace("=", "\\=")
     )
 
-input_file = "json-telegraf/results/output_1745149206.json"
+input_file = "json-telegraf/results/output_1745245842.json"
 output_file = input_file.replace(".json", ".influx")
 
 with open(input_file, "r") as fin, open(output_file, "w") as fout:

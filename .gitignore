@@ -18,6 +18,8 @@ package-lock.json
 /blob-report/
 /playwright/.cache/
 /telegraf/
+output*.influx
+output*.json
 # Distribution / packaging
 .Python
 build/
